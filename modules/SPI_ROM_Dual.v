@@ -1,3 +1,6 @@
+// SPI ROM Master
+// Useing Dual Port Moode
+
 module SPI_ROM_Dual #(
     parameter SPI_MODE = 0,
     parameter CLK_DIV  = 4
