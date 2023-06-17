@@ -1,7 +1,3 @@
-`include "modules/POR.sv"
-`include "modules/Counter.sv"
-`include "modules/Prescaler.sv"
-
 module hardware (
     input  logic clk,
     output logic user_led,
@@ -42,7 +38,7 @@ module hardware (
       .clk_out(clk_slow)
   );
   Counter #(
-      .N(30)
+      .N(PATTERN_LEN)
   ) BlinkCounter (
       .clk (clk_slow),
       .rstn(rstn),
@@ -50,6 +46,14 @@ module hardware (
   );
 
 
+
+  logic [15:0] pc;
+  logic [23:0] paddr = 24'h05_0000 + {pc, 2'b00};
+
   // Read SPI Flash
+  SPI_ROM rom (
+      .rstn(rstn),
+      .clk (clk),
+  );
 
 endmodule

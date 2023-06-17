@@ -7,10 +7,10 @@ metadata:
 	powershell.exe /c "tinyprog -m"
 
 build/hardware.blif: hardware.sv modules/*
-	yosys -p 'synth_ice40 -top hardware -blif build/hardware.blif' hardware.sv
+	yosys -p 'synth_ice40 -top hardware -blif build/hardware.blif' $^
 
 build/hardware.asc: hardware.pcf build/hardware.blif
-	arachne-pnr -s 3 -d 8k -P cm81 -o build/hardware.asc -p hardware.pcf build/hardware.blif
+	arachne-pnr -d 8k -P cm81 -o build/hardware.asc -p hardware.pcf build/hardware.blif
 
 build/hardware.bin: build/hardware.asc
 	icetime -d lp8k -c 12 -mtr build/hardware.rpt build/hardware.asc
