@@ -15,7 +15,6 @@ module hardware (
 
   assign pin_13 = !rstn;
 
-
   // Blink
   // SOS Pattern
   // [* - * - * - * * * - - - * * * - - - * * * - - - * - * - * -]
@@ -43,17 +42,6 @@ module hardware (
       .clk (clk_slow),
       .rstn(rstn),
       .cnt (cnt)
-  );
-
-
-
-  logic [15:0] pc;
-  logic [23:0] paddr = 24'h05_0000 + {pc, 2'b00};
-
-  // Read SPI Flash
-  SPI_ROM rom (
-      .rstn(rstn),
-      .clk (clk),
   );
 
 endmodule
