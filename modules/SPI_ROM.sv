@@ -16,7 +16,7 @@
 //                  :                               :                               :___:        //
 //  data_valid : ___:_______________________________:_______________________________|   |_______ //
 //                  :                               :                               :   :        //
-//  data       :  PREV_DATA - - - - - - - - - - - - : - | - - - - - - - - - - - | 0x0123_4567    //
+//  data       :  PREV_DATA - - - - - - - - - - - - : - | - - - | - - - | - - - | 0x0123_4567    //
 //                  :    ___     ___     ___     ___:    ___     ___     ___     ___:   :        //
 //  SCL        : ___:___|   |___|   |___|   |___|   |___|   |___|   |___|   |___|   |___:_______ //
 //                  :                               :                               :   :        //
@@ -28,30 +28,30 @@
 
 module SPI_ROM (
     // Control Signals,
-    input rstn,
-    input clk,
+    input logic rstn,
+    input logic clk,
 
     // TX (MOSI) Signals
-    input      [24:0] addr,
-    input             addr_valid,
-    output            addr_ready,
+    input  logic [24:0] addr,
+    input  logic        addr_valid,
+    output logic        addr_ready,
 
     // RX (MISO) Signals
-    output reg [31:0] data, // RX Shift Registor
-    output reg        data_valid,
+    output logic [31:0] data, // RX Shift Registor
+    output logic        data_valid,
     
     // SPI Interface
-    output reg scl,
-    output reg mosi
-    input      miso,
+    output logic scl,
+    output logic mosi
+    input  logic miso,
 );
 
 localparam [7:0] command = 8'h0B;
 
-reg mode; // 00:waiting, 10:sending, 11:receiving, 01:end
-reg [ 5:0] count;
-reg [31:0] tx_data; // TX Shift Registor
-reg [31:0] data; 
+logic mode; // 00:waiting, 10:sending, 11:receiving, 01:end
+logic [ 5:0] count;
+logic [31:0] tx_data; // TX Shift Registor
+logic [31:0] data; 
 
 assign addr_ready = ~|mode;
 
@@ -125,7 +125,7 @@ always @(negedge rstn or posedge clk) begin
         2'b01: begin
             // [H] goto Waiting mode
             mode <= 2'b00;
-
+            data_valid <= 0;
         end
 
         endcase
